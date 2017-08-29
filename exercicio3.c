@@ -43,27 +43,27 @@ int main(int argc, char *argv[]){
 	}
 
     
-    r = pthread_attr_setscope(&attr[NPROC], PTHREAD_SCOPE_PROCESS);
+    //r = pthread_attr_setscope(&attr[NPROC], PTHREAD_SCOPE_PROCESS);
 
     for(i = 0;i < NPROC; i++){
         CPU_SET(i, &cpu_set[i]);
         pthread_attr_init(&attr[i]);
         pthread_attr_setaffinity_np(&attr[i], sizeof(cpu_set_t), &cpu_set[i]);//estabelece a afinidade
     }
-    
+
     for (aux = 0; aux < NTHREADS; aux++){
-        if (i % NPROC == 0){
-            pthread_create(&tid[aux], &attr[i], runner, (void*)(size_t)aux);
-        }else if (i % NPROC == 1){
-            pthread_create(&tid[aux], &attr[i], runner, (void*)(size_t)aux);
-        }else if(i % NPROC == 2){
-            pthread_create(&tid[aux], &attr[i], runner, (void*)(size_t)aux);
-        }else if (i % NPROC == 3){
-            pthread_create(&tid[aux], &attr[i], runner, (void*)(size_t)aux);
+        if (aux % NPROC == 0){
+            pthread_create(&tid[aux], &attr[aux], runner, (void*)(size_t)aux);
+        }else if (aux % NPROC == 1){
+            pthread_create(&tid[aux], &attr[aux], runner, (void*)(size_t)aux);
+        }else if(aux % NPROC == 2){
+            pthread_create(&tid[aux], &attr[aux], runner, (void*)(size_t)aux);
+        }else if (aux % NPROC == 3){
+            pthread_create(&tid[aux], &attr[aux], runner, (void*)(size_t)aux);
         }
     }
 
-    for (i = 0; i < NTHREADS; i++){
+    for (i = 0; i < NPROC; i++){
         pthread_attr_destroy(&attr[i]);
     } 
 
