@@ -8,7 +8,6 @@ int *vetB;
 int aux;
 
 void *runner(void *p){
-		//printf("Esta é a execucao da Thread %d\n", (int)(size_t) p);
         int soma = vetA[(int)(size_t)p] + vetB[(int)(size_t)p];
         printf(">> Eu sou a thread %d e o resultado da soma é %d\n", (int)(size_t) p, soma );
         //printf(">>>VetA =  %d || vetB %d <<< \n", vetA[(int)(size_t)p], vetB[(int)(size_t)p]);
