@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#define MAX 100000000
+#define MAX 10000
 pthread_mutex_t mutex;
 pthread_cond_t condc, condp;
 int buffer = 0;
