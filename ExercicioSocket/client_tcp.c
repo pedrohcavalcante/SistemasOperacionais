@@ -6,7 +6,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #define PORTA 5555
-int main(){
+int main(int argc, char const *argv[]){
   int clientSocket;
   char buffer[1024];
   struct sockaddr_in serverAddr;
