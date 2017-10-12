@@ -37,7 +37,7 @@ void* consumidor(int* buffer){
 	pthread_exit(NULL);
 }
 
-int main(){
+int main(int argc, char const *argv[]){
 	pthread_t p, c;//threads do produtor e do consumidor
 	int status, i;
 	int *buffer = malloc(sizeof(int)*BUFFER_SIZE);//alocacao do buffer utilizado
