@@ -17,6 +17,7 @@
 int matriz_1[szMat][szMat];
 int matriz_2[szMat][szMat];
 int matriz_3[szMat][szMat];
+int Matrix_resultado_mult[szMat][szMat];
 
 
 
@@ -58,7 +59,7 @@ void print_matrix(){
 	printf("Matriz_3\n");
 	for (int i = 0; i < szMat; i++) {
 		for (int j = 0; j < szMat; j++) {
-			printf("[%d][%d]=%d ", i, j, matriz_3[i][j]);
+			printf("[%d][%d]=%d ", i, j, Matrix_resultado_mult[i][j]);
 		}
 		printf("\n");
 	}
@@ -86,12 +87,26 @@ int main(int argc, char *argv[]){
 	char buf[BUFLEN]; 
 
 	// Definindo Sockets
-	if ((soquete_1 = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP) == -1) || 
+	soquete_1 = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (soquete_1 == -1){
+		printf("erro soquete_1");
+	}
+
+	soquete_2 = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (soquete_2 == -1){
+		printf("erro soquete_2");
+	}
+
+	soquete_3 = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (soquete_3 == -1){
+		printf("erro soquete_3");
+	}
+	/*if ((soquete_1 = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP) == -1) || 
 		(soquete_2 = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP) == -1) || 
 		(soquete_3 = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP) == -1)){
 		printf("Erro na criação de alguns dos soquetes!");
 		return 1;
-	}
+	}*/
 
 
 	memset((char*) &escravo_1, 0, sizeof(escravo_1));
@@ -123,7 +138,7 @@ int main(int argc, char *argv[]){
 
 	preenche_matriz();
 
-	print_matrix();
+	/*print_matrix();*/
 
 	// Como já possuo código do envio de vetores, para facilitar o desenvolvimento vou transformar
 	// cada linha da matriz em um vetor;
@@ -165,7 +180,7 @@ int main(int argc, char *argv[]){
 		printf("Erro ao enviar pacote coluna vetor B\n" );
 		return 1;
 	}
-	if(sendto(soquete_3, vetor_C, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_3, slen_3) == -1){ 
+	if(sendto(soquete_3, vetor_C, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_3, slen_3) == -1){ 	
 		printf("Erro ao enviar pacote coluna vetor c\n" );
 		return 1;
 	}
@@ -238,42 +253,45 @@ int main(int argc, char *argv[]){
 	free(vetor_B);
 	free(vetor_C);
 
-	int vA[szMat] = {-1, -1, -1};
-	int vB[szMat] = {-1, -1, -1};
-	int vC[szMat] = {-1, -1, -1};
+	int vetor_resultante_A[szMat] = {0,0,0};
+	int vetor_resultante_B[szMat] = {0,0,0};
+	int vetor_resultante_C[szMat] = {0,0,0};
 
-	recvfrom(soquete_1, &vA, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_1, &slen_1);
+	recvfrom(soquete_1, &vetor_resultante_A, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_1, &slen_1);
   	for (int i = 0; i < szMat; i++) {
-	  	printf("Pacote recebido de %s: %d\nDado: %d\n", inet_ntoa(escravo_1.sin_addr), ntohs(escravo_1.sin_port), vA[i]);
+	  	printf("Pacote recebido de %s: %d\nDado: %d\n", inet_ntoa(escravo_1.sin_addr), ntohs(escravo_1.sin_port), vetor_resultante_A[i]);
   	}
   	close(soquete_1);
 
- 	recvfrom(soquete_2, &vB, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_2, &slen_2);
+ 	recvfrom(soquete_2, &vetor_resultante_B, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_2, &slen_2);
   	for (int i = 0; i < szMat; i++) {
-	  	printf("Pacote recebido de %s: %d\nDado: %d\n", inet_ntoa(escravo_2.sin_addr), ntohs(escravo_2.sin_port), vB[i]);
+	  	printf("Pacote recebido de %s: %d\nDado: %d\n", inet_ntoa(escravo_2.sin_addr), ntohs(escravo_2.sin_port), vetor_resultante_B[i]);
   	}
   	close(soquete_2);
 
- 	recvfrom(soquete_3, &vC, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_3, &slen_3);
+ 	recvfrom(soquete_3, &vetor_resultante_C, sizeof(int) * szMat, 0, (struct sockaddr *) &escravo_3, &slen_3);
    	for (int i = 0; i < szMat; i++) {
-	 	printf("Pacote recebido de %s: %d\nDado: %d\n", inet_ntoa(escravo_3.sin_addr), ntohs(escravo_3.sin_port), vC[i]);
+	 	printf("Pacote recebido de %s: %d\nDado: %d\n", inet_ntoa(escravo_3.sin_addr), ntohs(escravo_3.sin_port), vetor_resultante_C[i]);
   	}
   	close(soquete_3);
 
-  	int matriz_res[szMat][szMat];
+  	
+
+  	// Como anteriormente foi quebrada a matriz em vetores, agora vamos juntar os vetores em uma matriz;
 
   	for (int i = 0; i < szMat; i++) {
   		for (int j = 0; j < szMat; j++) {
   			if (i == 0) {
-  				matriz_res[i][j] = vA[j];
+  				Matrix_resultado_mult[i][j] = vetor_resultante_A[j];
   			}
   			else if (i == 1) {
-  				matriz_res[i][j] = vB[j];
+  				Matrix_resultado_mult[i][j] = vetor_resultante_B[j];
   			}
   			else {
-  				matriz_res[i][j] = vC[j];
+  				Matrix_resultado_mult[i][j] = vetor_resultante_C[j];
   			}
   		}
 	}
+	print_matrix();
 
 }
