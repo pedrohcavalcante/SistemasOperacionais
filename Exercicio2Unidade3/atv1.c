@@ -286,8 +286,12 @@ int main(int argc, char *argv[]){
 		char * quebra;
 		quebra = strtok(linha, " ");
 		while(quebra != NULL){
-
-			chamadas[aux++] = atoi(quebra);
+			if (atoi(quebra) > 199 || atoi(quebra) < 0){
+				printf("Erro. Número %d fora do escopo da aplicação\n", atoi(quebra));
+				return 0;
+			}else{
+			chamadas[aux++] = atoi(quebra);				
+			}
 
 			quebra = strtok(NULL, " ");
 		}
