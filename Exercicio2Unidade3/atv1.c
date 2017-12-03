@@ -61,14 +61,15 @@ void doSSTF(int posInicial, int total, int *chamadas){
 	int VetFinal[total+1];
 	printf("SSTF\n");
 	VetFinal[0] = posInicial;
-	printf("Ordem: %d ", posInicial);
+	//printf("Ordem: %d ", posInicial);
 	//int cilindros1, cilindros2;
 	//int cilindroAtual = 0;
 	
 	int j = 0;
 	int cilindros;
 	//int cilindroInicial = 0;
-	
+	int distancia = 0;
+	int proximo;
 	for (int i = 0; i < total; i++){
 		VetFinal[i+1] = chamadas[i];
 	}
@@ -80,7 +81,7 @@ void doSSTF(int posInicial, int total, int *chamadas){
 	int vetOrdenado[total+1];
 
 	for (int i = 0; i < total; i++){
-
+		printf("PosAtual: %d\n", posAtual);
 		int menorDistancia = INT_MAX;	
 
 		for (j = 0; j < total; j++){
@@ -88,18 +89,23 @@ void doSSTF(int posInicial, int total, int *chamadas){
 			if (posAtual - VetFinal[j] < 0){
 		
 				distancia = VetFinal[j] - posAtual;
+				if (distancia < menorDistancia){
+					menorDistancia = distancia;
+					proximo = j;
+				}
 		
 			}else{
 		
 				distancia = posAtual - VetFinal[j];	
-		
+				if (distancia < menorDistancia){
+					menorDistancia = distancia;
+					proximo = j;
+				}
 			}
 
 		}
-
-		posAtual = VetFinal[j];
-		
-
+		vetOrdenado[i] = VetFinal[proximo];
+		posAtual = VetFinal[proximo];
 	}
 	printf("\n");
 }
