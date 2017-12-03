@@ -5,7 +5,6 @@
 #include <stdlib.h>
 
 void print(int total, int *chamadas){
-	//printf("%s\n", z);
 	for (int i = 0; i < total; i++){
 		printf("%d ", chamadas[i]);
 	}
@@ -39,7 +38,6 @@ void doFCFS(int posInicial, int total, int *chamadas){
 		
 	}
 
-	//calcCilindro(total+1, ordem);
 	for (int i = 0; i < total-1; i++){
 		if (chamadas[i] < chamadas[i+1]){
 			cilindros += chamadas[i+1] - chamadas[i];
@@ -47,9 +45,6 @@ void doFCFS(int posInicial, int total, int *chamadas){
 			cilindros += chamadas[i] - chamadas[i+1];
 		}
 	}
-	/*for (int i = 0; i <= total; i++){
-		printf("=%d\n", ordem[i]);
-	}*/
 	printf("\n");
 	printf("Cilindros: %d\n\n", cilindros);
 	
@@ -58,13 +53,9 @@ void doSSTF(int posInicial, int total, int *chamadas){
 	int VetFinal[total+1];
 	printf("SSTF\n");
 	VetFinal[0] = posInicial;
-	//printf("Ordem: %d ", posInicial);
-	//int cilindros1, cilindros2;
-	//int cilindroAtual = 0;
 	
 	int j = 0;
 	int cilindros;
-	//int cilindroInicial = 0;
 	int distancia = 0;
 	int proximo;
 	for (int i = 0; i < total; i++){
@@ -85,11 +76,8 @@ void doSSTF(int posInicial, int total, int *chamadas){
 		for (j = 1; j <= total+1; j++){
 			if (posAtual - VetFinal[j] < 0){
 
-			//printf("Primeiro IF\n" );
 				distancia = VetFinal[j] - posAtual;
-				//printf("Distandoa vetFinal - posAtual: %d MAX_INT %d\n", distancia, menorDistancia);
 				if (distancia < menorDistancia){
-			//		printf("IF DO IF\n");
 					if (VetFinal[j] != -1){
 						menorDistancia = distancia;
 						proximo = j;
@@ -98,11 +86,8 @@ void doSSTF(int posInicial, int total, int *chamadas){
 				}
 		
 			}else{
-			//	printf("ELSE\n");
 				distancia = posAtual - VetFinal[j];	
-				//printf("Distandoa posAtual - VetFinal: %d MAX_INT %d\n", distancia, menorDistancia);
 				if (distancia < menorDistancia){
-			//		printf("IF DO ELSE\n");
 					if (VetFinal[j] != -1){
 						menorDistancia = distancia;
 						proximo = j;
@@ -112,14 +97,10 @@ void doSSTF(int posInicial, int total, int *chamadas){
 
 		}
 		
-		//vetOrdenado[i] = VetFinal[proximo];
 		posAtual = VetFinal[proximo];
 		VetFinal[proximo] = -1;
 	}
 	printf("\n");
-	/*for (int i = 1; i <= total+1; i++){
-		printf("%d \n", vetOrdenado[i]);
-	}*/
 
 	for (int i = 1; i <= total; i++){
 		if ( vetOrdenado[i] <  vetOrdenado[i+1]){
@@ -140,10 +121,8 @@ void doScanDOWN(int posInicial, int total, int *chamadas){
 	int sizeMaiores = 0;
 	for (int i = 0; i < total; i++){
 		if (chamadas[i] < posInicial){
-			//vetorMenores[i] = chamadas[i];
 			sizeMenores++;
 		}else{
-			//vetorMaiores[i] = chamadas[i];
 			sizeMaiores++;
 		}
 	}
@@ -169,23 +148,7 @@ void doScanDOWN(int posInicial, int total, int *chamadas){
 			}
 		}
 	}
-	//printf("Maiores: %d\n", sizeMaiores);
-	//printf("Menores: %d\n", sizeMenores);
-	/*for (int i = 0; i < total; i++){
-		//printf("VetMenores: %d\n", vetorMenores[i]);
-		printf("VetMaiores: %d\n", vetorMaiores[i]);
-	}*/
 
-/*	vetorOrdenado[0] = posInicial;
-	int j = 0;
-	for (int i = 1; i < total; i++){
-		while (j < total){
-			if (vetorMenores[i] <= posInicial){
-				vetorOrdenado[i] = vetorMenores[i];
-			}
-			j++;
-		}
-	}*/
 	qsort(vetorMenores, sizeMenores, sizeof(int), cmpfuncDesc);
 	qsort(vetorMaiores, sizeMaiores, sizeof(int), cmpfunc);
 	vetorOrdenado[0] = posInicial;
@@ -200,8 +163,6 @@ void doScanDOWN(int posInicial, int total, int *chamadas){
 		}
 
 	}
-	//print('<',sizeMenores, vetorMenores);
-	//print('>',sizeMaiores, vetorMaiores);
 	printf("Ordem: ");
 	print(total+1, vetorOrdenado);
 	int cilindros = 0;
@@ -227,10 +188,8 @@ void doScanUP(int posInicial, int total, int *chamadas){
 	int sizeMaiores = 0;
 	for (int i = 0; i < total; i++){
 		if (chamadas[i] < posInicial){
-			//vetorMenores[i] = chamadas[i];
 			sizeMenores++;
 		}else{
-			//vetorMaiores[i] = chamadas[i];
 			sizeMaiores++;
 		}
 	}
@@ -256,23 +215,6 @@ void doScanUP(int posInicial, int total, int *chamadas){
 			}
 		}
 	}
-	//printf("Maiores: %d\n", sizeMaiores);
-	//printf("Menores: %d\n", sizeMenores);
-	/*for (int i = 0; i < total; i++){
-		//printf("VetMenores: %d\n", vetorMenores[i]);
-		printf("VetMaiores: %d\n", vetorMaiores[i]);
-	}*/
-
-/*	vetorOrdenado[0] = posInicial;
-	int j = 0;
-	for (int i = 1; i < total; i++){
-		while (j < total){
-			if (vetorMenores[i] <= posInicial){
-				vetorOrdenado[i] = vetorMenores[i];
-			}
-			j++;
-		}
-	}*/
 	qsort(vetorMenores, sizeMenores, sizeof(int), cmpfuncDesc);
 	qsort(vetorMaiores, sizeMaiores, sizeof(int), cmpfunc);
 	vetorOrdenado[0] = posInicial;
@@ -288,8 +230,6 @@ void doScanUP(int posInicial, int total, int *chamadas){
 		
 
 	}
-	//print('<',sizeMenores, vetorMenores);
-	//print('>',sizeMaiores, vetorMaiores);
 	printf("Ordem: ");
 	print(total+1, vetorOrdenado);
 	int cilindros = 0;
