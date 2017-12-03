@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
 #include <stdlib.h>
 
 void calcCilindro(int total, int *chamadas){
@@ -57,33 +58,47 @@ void doFCFS(int posInicial, int total, int *chamadas){
 	
 }
 void doSSTF(int posInicial, int total, int *chamadas){
+	int VetFinal[total+1];
 	printf("SSTF\n");
-
+	VetFinal[0] = posInicial;
 	printf("Ordem: %d ", posInicial);
-	int cilindros1, cilindros2;
+	//int cilindros1, cilindros2;
 	//int cilindroAtual = 0;
-	int posAtual = posInicial;
+	
 	int j = 0;
 	int cilindros;
-	int cilindroInicial = 0;
-	if (posInicial > chamadas[0]){
-		cilindroInicial = posInicial - chamadas[0];
-	}else{
-		cilindroInicial = chamadas[0] - posInicial;
-	}
+	//int cilindroInicial = 0;
+	
 	for (int i = 0; i < total; i++){
-		for (int j = 0; j < total; j++){
-			if (chamadas[i] < chamadas[j] && chamadas[i]-chamadas[j] < cilindroInicial){
-				printf("IF\n");
-				cilindroInicial = chamadas[i]-chamadas[j];
-				posAtual = chamadas[j];
-			}else if(chamadas[i] > chamadas[j] && chamadas[j]-chamadas[i] < cilindroInicial){
-				printf("ELSE\n");
-				cilindroInicial = chamadas[j] - chamadas[i];
-				posAtual = chamadas[j];
+		VetFinal[i+1] = chamadas[i];
+	}
+
+	
+	int posMenor;
+	
+	int posAtual = VetFinal[0];
+	int vetOrdenado[total+1];
+
+	for (int i = 0; i < total; i++){
+
+		int menorDistancia = INT_MAX;	
+
+		for (j = 0; j < total; j++){
+		
+			if (posAtual - VetFinal[j] < 0){
+		
+				distancia = VetFinal[j] - posAtual;
+		
+			}else{
+		
+				distancia = posAtual - VetFinal[j];	
+		
 			}
+
 		}
-		printf("%d ", posAtual);
+
+		posAtual = VetFinal[j];
+		
 
 	}
 	printf("\n");
