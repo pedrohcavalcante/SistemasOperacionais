@@ -79,35 +79,59 @@ void doSSTF(int posInicial, int total, int *chamadas){
 	
 	int posAtual = VetFinal[0];
 	int vetOrdenado[total+1];
+	printf("Ordem: ");
+	for (int i = 1; i <= total+1; i++){
+		printf("%d ", posAtual);
+			vetOrdenado[i] = posAtual;
+		int menorDistancia = INT_MAX;
 
-	for (int i = 0; i < total; i++){
-		printf("PosAtual: %d\n", posAtual);
-		int menorDistancia = INT_MAX;	
-
-		for (j = 0; j < total; j++){
-		
+		for (j = 1; j <= total+1; j++){
 			if (posAtual - VetFinal[j] < 0){
-		
+
+			//printf("Primeiro IF\n" );
 				distancia = VetFinal[j] - posAtual;
+				//printf("Distandoa vetFinal - posAtual: %d MAX_INT %d\n", distancia, menorDistancia);
 				if (distancia < menorDistancia){
-					menorDistancia = distancia;
-					proximo = j;
+			//		printf("IF DO IF\n");
+					if (VetFinal[j] != -1){
+						menorDistancia = distancia;
+						proximo = j;
+					}
+					
 				}
 		
 			}else{
-		
+			//	printf("ELSE\n");
 				distancia = posAtual - VetFinal[j];	
+				//printf("Distandoa posAtual - VetFinal: %d MAX_INT %d\n", distancia, menorDistancia);
 				if (distancia < menorDistancia){
-					menorDistancia = distancia;
-					proximo = j;
+			//		printf("IF DO ELSE\n");
+					if (VetFinal[j] != -1){
+						menorDistancia = distancia;
+						proximo = j;
+					}
 				}
 			}
 
 		}
-		vetOrdenado[i] = VetFinal[proximo];
+		
+		//vetOrdenado[i] = VetFinal[proximo];
 		posAtual = VetFinal[proximo];
+		VetFinal[proximo] = -1;
 	}
 	printf("\n");
+	/*for (int i = 1; i <= total+1; i++){
+		printf("%d \n", vetOrdenado[i]);
+	}*/
+
+	for (int i = 1; i <= total; i++){
+		if ( vetOrdenado[i] <  vetOrdenado[i+1]){
+			cilindros +=  vetOrdenado[i+1] -  vetOrdenado[i];
+		}else{
+			cilindros +=  vetOrdenado[i] -  vetOrdenado[i+1];
+		}
+	}
+	printf("Cilindros: %d\n", cilindros);
 }
 void doScanDOWN();
 void doScanUP();
