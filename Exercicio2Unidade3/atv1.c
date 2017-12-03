@@ -4,21 +4,18 @@
 #include <limits.h>
 #include <stdlib.h>
 
-void calcCilindro(int total, int *chamadas){
-	int cilindros;
-	printf("%d\n", total);
-	for (int i = 0; i < total-1; i++){
-		if (chamadas[i] < chamadas[i+1]){
-			cilindros += chamadas[i+1] - chamadas[i];
-		}else{
-			cilindros += chamadas[i] - chamadas[i+1];
-		}
+void print(int total, int *chamadas){
+	//printf("%s\n", z);
+	for (int i = 0; i < total; i++){
+		printf("%d ", chamadas[i]);
 	}
-	/*for (int i = 0; i <= total; i++){
-		printf("=%d\n", chamadas[i]);
-	}*/
-	printf("\n");
-	printf("Cilindros: %d\n\n", cilindros);
+}
+
+int cmpfunc (const void * a, const void * b) {
+   return ( *(int*)a - *(int*)b );
+}
+int cmpfuncDesc (const void * a, const void * b) {
+   return !( *(int*)a - *(int*)b );
 }
 
 void doFCFS(int posInicial, int total, int *chamadas){
@@ -132,9 +129,186 @@ void doSSTF(int posInicial, int total, int *chamadas){
 		}
 	}
 	printf("Cilindros: %d\n", cilindros);
+	printf("\n");
 }
-void doScanDOWN();
-void doScanUP();
+void doScanDOWN(int posInicial, int total, int *chamadas){
+
+	printf("Scan Desce\n");
+	
+	int vetorOrdenado[total+1];
+	int sizeMenores = 0;
+	int sizeMaiores = 0;
+	for (int i = 0; i < total; i++){
+		if (chamadas[i] < posInicial){
+			//vetorMenores[i] = chamadas[i];
+			sizeMenores++;
+		}else{
+			//vetorMaiores[i] = chamadas[i];
+			sizeMaiores++;
+		}
+	}
+
+	int vetorMenores[sizeMenores];
+	int vetorMaiores[sizeMaiores];
+	
+
+	for (int i = 0; i < sizeMenores; i++){
+		for(int j = 0; j < total; j++){
+			if (chamadas[j] <= posInicial){
+				vetorMenores[i] = chamadas[j];
+				i++;
+			}
+		}
+	}
+
+	for (int i = 0; i < sizeMaiores; i++){
+		for(int j = 0; j < total; j++){
+			if (chamadas[j] > posInicial){
+				vetorMaiores[i] = chamadas[j];
+				i++;
+			}
+		}
+	}
+	//printf("Maiores: %d\n", sizeMaiores);
+	//printf("Menores: %d\n", sizeMenores);
+	/*for (int i = 0; i < total; i++){
+		//printf("VetMenores: %d\n", vetorMenores[i]);
+		printf("VetMaiores: %d\n", vetorMaiores[i]);
+	}*/
+
+/*	vetorOrdenado[0] = posInicial;
+	int j = 0;
+	for (int i = 1; i < total; i++){
+		while (j < total){
+			if (vetorMenores[i] <= posInicial){
+				vetorOrdenado[i] = vetorMenores[i];
+			}
+			j++;
+		}
+	}*/
+	qsort(vetorMenores, sizeMenores, sizeof(int), cmpfuncDesc);
+	qsort(vetorMaiores, sizeMaiores, sizeof(int), cmpfunc);
+	vetorOrdenado[0] = posInicial;
+	for (int i = 0; i < total;){
+		for (int j = 0; j < sizeMenores; j++){
+			vetorOrdenado[i+1] = vetorMenores[j];
+			i++;
+		}
+		for (int k = 0; k < sizeMaiores; k++){
+			vetorOrdenado[i+1] = vetorMaiores[k];
+			i++;
+		}
+
+	}
+	//print('<',sizeMenores, vetorMenores);
+	//print('>',sizeMaiores, vetorMaiores);
+	printf("Ordem: ");
+	print(total+1, vetorOrdenado);
+	int cilindros = 0;
+	for (int i = 1; i <= total; i++){
+		if ( vetorOrdenado[i] <  vetorOrdenado[i+1]){
+			cilindros +=  vetorOrdenado[i+1] -  vetorOrdenado[i];
+		}else{
+			cilindros +=  vetorOrdenado[i] -  vetorOrdenado[i+1];
+		}
+	}
+	printf("\n");
+	printf("Cilindros: %d\n", cilindros);
+
+	printf("\n");
+
+}
+
+void doScanUP(int posInicial, int total, int *chamadas){
+	printf("Scan Sobe\n");
+	
+	int vetorOrdenado[total+1];
+	int sizeMenores = 0;
+	int sizeMaiores = 0;
+	for (int i = 0; i < total; i++){
+		if (chamadas[i] < posInicial){
+			//vetorMenores[i] = chamadas[i];
+			sizeMenores++;
+		}else{
+			//vetorMaiores[i] = chamadas[i];
+			sizeMaiores++;
+		}
+	}
+
+	int vetorMenores[sizeMenores];
+	int vetorMaiores[sizeMaiores];
+	
+
+	for (int i = 0; i < sizeMenores; i++){
+		for(int j = 0; j < total; j++){
+			if (chamadas[j] <= posInicial){
+				vetorMenores[i] = chamadas[j];
+				i++;
+			}
+		}
+	}
+
+	for (int i = 0; i < sizeMaiores; i++){
+		for(int j = 0; j < total; j++){
+			if (chamadas[j] > posInicial){
+				vetorMaiores[i] = chamadas[j];
+				i++;
+			}
+		}
+	}
+	//printf("Maiores: %d\n", sizeMaiores);
+	//printf("Menores: %d\n", sizeMenores);
+	/*for (int i = 0; i < total; i++){
+		//printf("VetMenores: %d\n", vetorMenores[i]);
+		printf("VetMaiores: %d\n", vetorMaiores[i]);
+	}*/
+
+/*	vetorOrdenado[0] = posInicial;
+	int j = 0;
+	for (int i = 1; i < total; i++){
+		while (j < total){
+			if (vetorMenores[i] <= posInicial){
+				vetorOrdenado[i] = vetorMenores[i];
+			}
+			j++;
+		}
+	}*/
+	qsort(vetorMenores, sizeMenores, sizeof(int), cmpfuncDesc);
+	qsort(vetorMaiores, sizeMaiores, sizeof(int), cmpfunc);
+	vetorOrdenado[0] = posInicial;
+	for (int i = 0; i < total;){
+		for (int k = 0; k < sizeMaiores; k++){
+			vetorOrdenado[i+1] = vetorMaiores[k];
+			i++;
+		}
+		for (int j = 0; j < sizeMenores; j++){
+			vetorOrdenado[i+1] = vetorMenores[j];
+			i++;
+		}
+		
+
+	}
+	//print('<',sizeMenores, vetorMenores);
+	//print('>',sizeMaiores, vetorMaiores);
+	printf("Ordem: ");
+	print(total+1, vetorOrdenado);
+	int cilindros = 0;
+	for (int i = 1; i <= total; i++){
+		if ( vetorOrdenado[i] <  vetorOrdenado[i+1]){
+			cilindros +=  vetorOrdenado[i+1] -  vetorOrdenado[i];
+		}else{
+			cilindros +=  vetorOrdenado[i] -  vetorOrdenado[i+1];
+		}
+	}
+	printf("\n");
+	printf("Cilindros: %d\n", cilindros);
+
+	printf("\n");
+
+
+}
+
+
 
 int main(int argc, char *argv[]){
 
@@ -176,6 +350,8 @@ int main(int argc, char *argv[]){
 
 	doFCFS(posicaoInicial, total, chamadas);
 	doSSTF(posicaoInicial, total, chamadas);
+	doScanDOWN(posicaoInicial, total, chamadas);
+	doScanUP(posicaoInicial, total, chamadas);
 
 
 }
