@@ -1,0 +1,3 @@
+#Instruções
+
+O arquivo deve ser compilado com o comando gcc atv1.c -o saida e executado com ./saida <nomeDoArquivoDeEntradas>
