@@ -102,10 +102,14 @@ void doSSTF(int posInicial, int total, int *chamadas){
 	}
 	printf("\n");
 
-	for (int i = 1; i <= total; i++){
+	for (int i = 0; i < total; i++){
 		if ( vetOrdenado[i] <  vetOrdenado[i+1]){
+			//printf("vetOrdenado[i+1] -  vetOrdenado[i] >> %d\n", vetOrdenado[i+1] -  vetOrdenado[i]);
+
 			cilindros +=  vetOrdenado[i+1] -  vetOrdenado[i];
 		}else{
+			//printf("vetOrdenado[i] -  vetOrdenado[i+1] >> %d\n", vetOrdenado[i] -  vetOrdenado[i+1]);
+
 			cilindros +=  vetOrdenado[i] -  vetOrdenado[i+1];
 		}
 	}
@@ -166,10 +170,13 @@ void doScanDOWN(int posInicial, int total, int *chamadas){
 	printf("Ordem: ");
 	print(total+1, vetorOrdenado);
 	int cilindros = 0;
-	for (int i = 1; i <= total; i++){
+	for (int i = 0; i < total; i++){
 		if ( vetorOrdenado[i] <  vetorOrdenado[i+1]){
+		//	printf("vetorOrdenado[i+1] -  vetorOrdenado[i] >> %d\n", vetorOrdenado[i+1] -  vetorOrdenado[i]);
 			cilindros +=  vetorOrdenado[i+1] -  vetorOrdenado[i];
 		}else{
+		//	printf("vetorOrdenado[i] -  vetorOrdenado[i+1] >> %d\n", vetorOrdenado[i] -  vetorOrdenado[i+1]);
+
 			cilindros +=  vetorOrdenado[i] -  vetorOrdenado[i+1];
 		}
 	}
@@ -233,7 +240,7 @@ void doScanUP(int posInicial, int total, int *chamadas){
 	printf("Ordem: ");
 	print(total+1, vetorOrdenado);
 	int cilindros = 0;
-	for (int i = 1; i <= total; i++){
+	for (int i = 0; i < total; i++){
 		if ( vetorOrdenado[i] <  vetorOrdenado[i+1]){
 			cilindros +=  vetorOrdenado[i+1] -  vetorOrdenado[i];
 		}else{
